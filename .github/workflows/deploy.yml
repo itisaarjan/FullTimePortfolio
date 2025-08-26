@@ -1,0 +1,61 @@
+name: Deploy to S3
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AWS_REGION: us-east-1 # Change this to your preferred region
+  S3_BUCKET: your-portfolio-bucket-name # Change this to your S3 bucket name
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Deploy to S3
+      run: |
+        aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
+
+    - name: Invalidate CloudFront cache (optional)
+      if: ${{ env.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+          --paths "/*"
+      env:
+        CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+
+    - name: Deploy status
+      run: |
+        echo "✅ Deployment completed successfully!"
+        echo "🌐 Your portfolio is now live at: https://${{ env.S3_BUCKET }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
+        echo "📦 S3 Bucket: ${{ env.S3_BUCKET }}"
+        echo "🌍 Region: ${{ env.AWS_REGION }}"
