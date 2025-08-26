@@ -11,6 +11,7 @@ env:
   S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
 
 permissions:
+    
   id-token: write
   contents: read
 
@@ -41,8 +42,8 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Deploy to S3
-      shell: bash
-      run: aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
+      run: |
+        aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
 
     - name: Deploy status
       run: |
