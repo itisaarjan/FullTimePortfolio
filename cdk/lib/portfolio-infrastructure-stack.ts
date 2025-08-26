@@ -17,7 +17,7 @@ export interface PortfolioInfrastructureStackProps extends cdk.StackProps {
 }
 
 export class PortfolioInfrastructureStack extends cdk.Stack {
-  public readonly bucket: s3.Bucket;
+  public readonly bucket: s3.IBucket;
   public readonly distribution?: cloudfront.Distribution;
   public readonly deploymentRole: iam.Role;
 
@@ -26,25 +26,8 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
 
     const { bucketName, githubUsername, githubRepoName, domainName, enableCloudFront = false } = props;
 
-    // Create S3 bucket for static website hosting
-    this.bucket = new s3.Bucket(this, 'PortfolioBucket', {
-      bucketName,
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'index.html',
-      publicReadAccess: true,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
-      autoDeleteObjects: false,
-      versioned: true,
-      cors: [
-        {
-          allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
-          allowedOrigins: ['*'],
-          allowedHeaders: ['*'],
-          maxAge: 3000,
-        },
-      ],
-    });
+    // Import existing S3 bucket for static website hosting
+    this.bucket = s3.Bucket.fromBucketName(this, 'PortfolioBucket', bucketName);
 
     // Create bucket policy for public read access
     this.bucket.addToResourcePolicy(
@@ -56,12 +39,12 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
       })
     );
 
-    // Create OIDC provider for GitHub Actions
-    const oidcProvider = new iam.OpenIdConnectProvider(this, 'GitHubOIDCProvider', {
-      url: 'https://token.actions.githubusercontent.com',
-      clientIds: ['sts.amazonaws.com'],
-      thumbprints: ['6938fd4d98bab03faadb97b34396831e3780aea1'],
-    });
+    // Import existing OIDC provider for GitHub Actions
+    const oidcProvider = iam.OpenIdConnectProvider.fromOpenIdConnectProviderArn(
+      this,
+      'GitHubOIDCProvider',
+      `arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`
+    );
 
     // Create IAM role for GitHub Actions deployment
     this.deploymentRole = new iam.Role(this, 'GitHubActionsDeploymentRole', {
@@ -108,10 +91,12 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
 
       // If domain name is provided, create certificate and hosted zone
       if (domainName) {
+        // Look up the existing hosted zone
         hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
           domainName: domainName.split('.').slice(-2).join('.'),
         });
 
+        // Create SSL certificate
         certificate = new acm.Certificate(this, 'Certificate', {
           domainName,
           subjectAlternativeNames: [`*.${domainName}`],
@@ -122,7 +107,9 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
       // Create CloudFront distribution
       this.distribution = new cloudfront.Distribution(this, 'PortfolioDistribution', {
         defaultBehavior: {
-          origin: new origins.S3Origin(this.bucket),
+          origin: new origins.HttpOrigin(`${bucketName}.s3-website-${this.region}.amazonaws.com`, {
+            protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+          }),
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
           originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
@@ -143,21 +130,25 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
         domainNames: domainName ? [domainName] : undefined,
         certificate,
         priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
-        enableLogging: true,
-        logBucket: new s3.Bucket(this, 'CloudFrontLogBucket', {
-          removalPolicy: cdk.RemovalPolicy.DESTROY,
-          autoDeleteObjects: true,
-          lifecycleRules: [
-            {
-              expiration: cdk.Duration.days(90),
-            },
-          ],
-        }),
+        enableLogging: false,
+        // Additional settings for better performance
+        defaultRootObject: 'index.html',
+        enabled: true,
       });
 
-      // Create Route 53 record if domain is provided
+      // Create Route 53 records if domain is provided
       if (domainName && hostedZone) {
+        // A record for the root domain
         new route53.ARecord(this, 'PortfolioARecord', {
+          zone: hostedZone,
+          recordName: domainName,
+          target: route53.RecordTarget.fromAlias(
+            new targets.CloudFrontTarget(this.distribution)
+          ),
+        });
+
+        // AAAA record for IPv6 support
+        new route53.AaaaRecord(this, 'PortfolioAaaaRecord', {
           zone: hostedZone,
           recordName: domainName,
           target: route53.RecordTarget.fromAlias(
@@ -177,7 +168,7 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
               'cloudfront:GetInvalidation',
               'cloudfront:ListInvalidations',
             ],
-            resources: [this.distribution.distributionArn],
+            resources: [`arn:aws:cloudfront::${this.account}:distribution/${this.distribution.distributionId}`],
           }),
         ],
       });

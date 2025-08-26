@@ -1,0 +1,183 @@
+{
+  "version": "34.0.0",
+  "artifacts": {
+    "PortfolioInfrastructureStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "PortfolioInfrastructureStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "PortfolioInfrastructureStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://985539769349/us-east-1",
+      "properties": {
+        "templateFile": "PortfolioInfrastructureStack.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Component": "Infrastructure",
+          "Environment": "Production",
+          "Owner": "Arjan Subedi",
+          "Project": "Portfolio",
+          "Service": "Portfolio"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::985539769349:role/cdk-hnb659fds-deploy-role-985539769349-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::985539769349:role/cdk-hnb659fds-cfn-exec-role-985539769349-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-985539769349-us-east-1/a88e31c648566da2d52663eb7854f1ecf110b16cb3819d1ebdfcca36c5d8cb6d.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "PortfolioInfrastructureStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::985539769349:role/cdk-hnb659fds-lookup-role-985539769349-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "PortfolioInfrastructureStack.assets"
+      ],
+      "metadata": {
+        "/PortfolioInfrastructureStack": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Component",
+                "Value": "Infrastructure"
+              },
+              {
+                "Key": "Environment",
+                "Value": "Production"
+              },
+              {
+                "Key": "Owner",
+                "Value": "Arjan Subedi"
+              },
+              {
+                "Key": "Project",
+                "Value": "Portfolio"
+              },
+              {
+                "Key": "Service",
+                "Value": "Portfolio"
+              }
+            ]
+          }
+        ],
+        "/PortfolioInfrastructureStack/GitHubActionsDeploymentRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GitHubActionsDeploymentRoleF2069547"
+          }
+        ],
+        "/PortfolioInfrastructureStack/S3DeploymentPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3DeploymentPolicy3E968DF1"
+          }
+        ],
+        "/PortfolioInfrastructureStack/Certificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Certificate4E7ABB08"
+          }
+        ],
+        "/PortfolioInfrastructureStack/PortfolioDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PortfolioDistribution95A7252B"
+          }
+        ],
+        "/PortfolioInfrastructureStack/PortfolioARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PortfolioARecordE02F6A15"
+          }
+        ],
+        "/PortfolioInfrastructureStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/PortfolioInfrastructureStack/PortfolioAaaaRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PortfolioAaaaRecord6748D053"
+          }
+        ],
+        "/PortfolioInfrastructureStack/CloudFrontInvalidationPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudFrontInvalidationPolicyA47BE5B9"
+          }
+        ],
+        "/PortfolioInfrastructureStack/BucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketName"
+          }
+        ],
+        "/PortfolioInfrastructureStack/BucketWebsiteUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketWebsiteUrl"
+          }
+        ],
+        "/PortfolioInfrastructureStack/DeploymentRoleArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeploymentRoleArn"
+          }
+        ],
+        "/PortfolioInfrastructureStack/DistributionId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DistributionId"
+          }
+        ],
+        "/PortfolioInfrastructureStack/DistributionDomainName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DistributionDomainName"
+          }
+        ],
+        "/PortfolioInfrastructureStack/WebsiteUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebsiteUrl"
+          }
+        ],
+        "/PortfolioInfrastructureStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/PortfolioInfrastructureStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/PortfolioInfrastructureStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "PortfolioInfrastructureStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

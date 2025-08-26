@@ -1,0 +1,416 @@
+{
+ "Description": "Portfolio infrastructure with S3, CloudFront, and GitHub Actions OIDC",
+ "Resources": {
+  "GitHubActionsDeploymentRoleF2069547": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRoleWithWebIdentity",
+       "Condition": {
+        "StringEquals": {
+         "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+        },
+        "StringLike": {
+         "token.actions.githubusercontent.com:sub": "repo:itisaarjan/FullTimePortfolio:*"
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Federated": "arn:aws:iam::985539769349:oidc-provider/token.actions.githubusercontent.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "Role for GitHub Actions to deploy portfolio to S3",
+    "MaxSessionDuration": 3600,
+    "RoleName": "GitHubActionsPortfolioDeploy",
+    "Tags": [
+     {
+      "Key": "Component",
+      "Value": "Infrastructure"
+     },
+     {
+      "Key": "Environment",
+      "Value": "Production"
+     },
+     {
+      "Key": "Owner",
+      "Value": "Arjan Subedi"
+     },
+     {
+      "Key": "Project",
+      "Value": "Portfolio"
+     },
+     {
+      "Key": "Service",
+      "Value": "Portfolio"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/GitHubActionsDeploymentRole/Resource"
+   }
+  },
+  "S3DeploymentPolicy3E968DF1": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:s3:::arjan-subedi-portfolio",
+        "arn:aws:s3:::arjan-subedi-portfolio/*"
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PortfolioS3DeploymentPolicy",
+    "Roles": [
+     {
+      "Ref": "GitHubActionsDeploymentRoleF2069547"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/S3DeploymentPolicy/Resource"
+   }
+  },
+  "Certificate4E7ABB08": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "arjansubedi.com",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "arjansubedi.com",
+      "HostedZoneId": "Z0081469162UYK3GDDQZ2"
+     }
+    ],
+    "SubjectAlternativeNames": [
+     "*.arjansubedi.com"
+    ],
+    "Tags": [
+     {
+      "Key": "Component",
+      "Value": "Infrastructure"
+     },
+     {
+      "Key": "Environment",
+      "Value": "Production"
+     },
+     {
+      "Key": "Name",
+      "Value": "PortfolioInfrastructureStack/Certificate"
+     },
+     {
+      "Key": "Owner",
+      "Value": "Arjan Subedi"
+     },
+     {
+      "Key": "Project",
+      "Value": "Portfolio"
+     },
+     {
+      "Key": "Service",
+      "Value": "Portfolio"
+     }
+    ],
+    "ValidationMethod": "DNS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/Certificate/Resource"
+   }
+  },
+  "PortfolioDistribution95A7252B": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "Aliases": [
+      "arjansubedi.com"
+     ],
+     "CustomErrorResponses": [
+      {
+       "ErrorCode": 404,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      },
+      {
+       "ErrorCode": 403,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      }
+     ],
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+      "TargetOriginId": "PortfolioInfrastructureStackPortfolioDistributionOrigin1472E48FF",
+      "ViewerProtocolPolicy": "redirect-to-https"
+     },
+     "DefaultRootObject": "index.html",
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "http-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": "arjan-subedi-portfolio.s3-website-us-east-1.amazonaws.com",
+       "Id": "PortfolioInfrastructureStackPortfolioDistributionOrigin1472E48FF"
+      }
+     ],
+     "PriceClass": "PriceClass_100",
+     "ViewerCertificate": {
+      "AcmCertificateArn": {
+       "Ref": "Certificate4E7ABB08"
+      },
+      "MinimumProtocolVersion": "TLSv1.2_2021",
+      "SslSupportMethod": "sni-only"
+     }
+    },
+    "Tags": [
+     {
+      "Key": "Component",
+      "Value": "Infrastructure"
+     },
+     {
+      "Key": "Environment",
+      "Value": "Production"
+     },
+     {
+      "Key": "Owner",
+      "Value": "Arjan Subedi"
+     },
+     {
+      "Key": "Project",
+      "Value": "Portfolio"
+     },
+     {
+      "Key": "Service",
+      "Value": "Portfolio"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/PortfolioDistribution/Resource"
+   }
+  },
+  "PortfolioARecordE02F6A15": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "PortfolioDistribution95A7252B",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z0081469162UYK3GDDQZ2",
+    "Name": "arjansubedi.com.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/PortfolioARecord/Resource"
+   }
+  },
+  "PortfolioAaaaRecord6748D053": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "PortfolioDistribution95A7252B",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z0081469162UYK3GDDQZ2",
+    "Name": "arjansubedi.com.",
+    "Type": "AAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/PortfolioAaaaRecord/Resource"
+   }
+  },
+  "CloudFrontInvalidationPolicyA47BE5B9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "cloudfront:CreateInvalidation",
+        "cloudfront:GetInvalidation",
+        "cloudfront:ListInvalidations"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:cloudfront::985539769349:distribution/",
+          {
+           "Ref": "PortfolioDistribution95A7252B"
+          }
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PortfolioCloudFrontInvalidationPolicy",
+    "Roles": [
+     {
+      "Ref": "GitHubActionsDeploymentRoleF2069547"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/CloudFrontInvalidationPolicy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OQY7CMAxFz8I+NR3KHACYLZpROQAyqYtM27hKnEGjKHcftVnA6v9nPcvewUddQ73BZ6hsN1Qj3yBdFO1g8BmuKTRwjHYgPWIgwzhBamUkc+rdmj8ysv1bsLRsLHnlni0qTejwTh7S6TVb1DfMxo4Su96LU0hfHNTzLSqLW8R3zsZLVPpsIB1asuK79Ym1XUjNAREL5WxaChK9Xa+dcZ7Z3Zf6HXWOWvaKkI2TjuARtr+7PTRQbx6BufLRKU8Ebcl/sRJlMiYBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "PortfolioInfrastructureStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Mappings": {
+  "AWSCloudFrontPartitionHostedZoneIdMap": {
+   "aws": {
+    "zoneId": "Z2FDTNDATAQYW2"
+   },
+   "aws-cn": {
+    "zoneId": "Z3RFFRIM2A3IF5"
+   }
+  }
+ },
+ "Outputs": {
+  "BucketName": {
+   "Description": "S3 bucket name for portfolio hosting",
+   "Value": "arjan-subedi-portfolio",
+   "Export": {
+    "Name": "PortfolioInfrastructureStack-BucketName"
+   }
+  },
+  "BucketWebsiteUrl": {
+   "Description": "S3 bucket website URL",
+   "Value": "http://arjan-subedi-portfolio.s3-website-us-east-1.amazonaws.com",
+   "Export": {
+    "Name": "PortfolioInfrastructureStack-BucketWebsiteUrl"
+   }
+  },
+  "DeploymentRoleArn": {
+   "Description": "IAM role ARN for GitHub Actions deployment",
+   "Value": {
+    "Fn::GetAtt": [
+     "GitHubActionsDeploymentRoleF2069547",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "PortfolioInfrastructureStack-DeploymentRoleArn"
+   }
+  },
+  "DistributionId": {
+   "Description": "CloudFront distribution ID",
+   "Value": {
+    "Ref": "PortfolioDistribution95A7252B"
+   },
+   "Export": {
+    "Name": "PortfolioInfrastructureStack-DistributionId"
+   }
+  },
+  "DistributionDomainName": {
+   "Description": "CloudFront distribution domain name",
+   "Value": {
+    "Fn::GetAtt": [
+     "PortfolioDistribution95A7252B",
+     "DomainName"
+    ]
+   },
+   "Export": {
+    "Name": "PortfolioInfrastructureStack-DistributionDomainName"
+   }
+  },
+  "WebsiteUrl": {
+   "Description": "Portfolio website URL",
+   "Value": "https://arjansubedi.com",
+   "Export": {
+    "Name": "PortfolioInfrastructureStack-WebsiteUrl"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

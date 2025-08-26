@@ -9,8 +9,8 @@ const app = new cdk.App();
 const bucketName = app.node.tryGetContext('bucketName') || process.env.BUCKET_NAME || 'arjan-subedi-portfolio';
 const githubUsername = app.node.tryGetContext('githubUsername') || process.env.GITHUB_USERNAME || 'itisaarjan';
 const githubRepoName = app.node.tryGetContext('githubRepoName') || process.env.GITHUB_REPO_NAME || 'FullTimePortfolio';
-const domainName = app.node.tryGetContext('domainName') || process.env.DOMAIN_NAME;
-const enableCloudFront = app.node.tryGetContext('enableCloudFront') || process.env.ENABLE_CLOUDFRONT === 'true';
+const domainName = app.node.tryGetContext('domainName') || process.env.DOMAIN_NAME || 'arjansubedi.com';
+const enableCloudFront = app.node.tryGetContext('enableCloudFront') || process.env.ENABLE_CLOUDFRONT === 'true' || true;
 
 new PortfolioInfrastructureStack(app, 'PortfolioInfrastructureStack', {
   env: { 

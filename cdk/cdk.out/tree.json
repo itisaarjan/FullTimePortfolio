@@ -1,0 +1,569 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "PortfolioInfrastructureStack": {
+        "id": "PortfolioInfrastructureStack",
+        "path": "PortfolioInfrastructureStack",
+        "children": {
+          "PortfolioBucket": {
+            "id": "PortfolioBucket",
+            "path": "PortfolioInfrastructureStack/PortfolioBucket",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+              "version": "2.100.0"
+            }
+          },
+          "GitHubOIDCProvider": {
+            "id": "GitHubOIDCProvider",
+            "path": "PortfolioInfrastructureStack/GitHubOIDCProvider",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.100.0"
+            }
+          },
+          "GitHubActionsDeploymentRole": {
+            "id": "GitHubActionsDeploymentRole",
+            "path": "PortfolioInfrastructureStack/GitHubActionsDeploymentRole",
+            "children": {
+              "ImportGitHubActionsDeploymentRole": {
+                "id": "ImportGitHubActionsDeploymentRole",
+                "path": "PortfolioInfrastructureStack/GitHubActionsDeploymentRole/ImportGitHubActionsDeploymentRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.100.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/GitHubActionsDeploymentRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRoleWithWebIdentity",
+                          "Condition": {
+                            "StringEquals": {
+                              "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                            },
+                            "StringLike": {
+                              "token.actions.githubusercontent.com:sub": "repo:itisaarjan/FullTimePortfolio:*"
+                            }
+                          },
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Federated": "arn:aws:iam::985539769349:oidc-provider/token.actions.githubusercontent.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "description": "Role for GitHub Actions to deploy portfolio to S3",
+                    "maxSessionDuration": 3600,
+                    "roleName": "GitHubActionsPortfolioDeploy",
+                    "tags": [
+                      {
+                        "key": "Component",
+                        "value": "Infrastructure"
+                      },
+                      {
+                        "key": "Environment",
+                        "value": "Production"
+                      },
+                      {
+                        "key": "Owner",
+                        "value": "Arjan Subedi"
+                      },
+                      {
+                        "key": "Project",
+                        "value": "Portfolio"
+                      },
+                      {
+                        "key": "Service",
+                        "value": "Portfolio"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.100.0"
+            }
+          },
+          "S3DeploymentPolicy": {
+            "id": "S3DeploymentPolicy",
+            "path": "PortfolioInfrastructureStack/S3DeploymentPolicy",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/S3DeploymentPolicy/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                  "aws:cdk:cloudformation:props": {
+                    "policyDocument": {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "s3:DeleteObject",
+                            "s3:GetObject",
+                            "s3:ListBucket",
+                            "s3:PutObject"
+                          ],
+                          "Effect": "Allow",
+                          "Resource": [
+                            "arn:aws:s3:::arjan-subedi-portfolio",
+                            "arn:aws:s3:::arjan-subedi-portfolio/*"
+                          ]
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "policyName": "PortfolioS3DeploymentPolicy",
+                    "roles": [
+                      {
+                        "Ref": "GitHubActionsDeploymentRoleF2069547"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Policy",
+              "version": "2.100.0"
+            }
+          },
+          "HostedZone": {
+            "id": "HostedZone",
+            "path": "PortfolioInfrastructureStack/HostedZone",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.100.0"
+            }
+          },
+          "Certificate": {
+            "id": "Certificate",
+            "path": "PortfolioInfrastructureStack/Certificate",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/Certificate/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CertificateManager::Certificate",
+                  "aws:cdk:cloudformation:props": {
+                    "domainName": "arjansubedi.com",
+                    "domainValidationOptions": [
+                      {
+                        "domainName": "arjansubedi.com",
+                        "hostedZoneId": "Z0081469162UYK3GDDQZ2"
+                      }
+                    ],
+                    "subjectAlternativeNames": [
+                      "*.arjansubedi.com"
+                    ],
+                    "tags": [
+                      {
+                        "key": "Component",
+                        "value": "Infrastructure"
+                      },
+                      {
+                        "key": "Environment",
+                        "value": "Production"
+                      },
+                      {
+                        "key": "Name",
+                        "value": "PortfolioInfrastructureStack/Certificate"
+                      },
+                      {
+                        "key": "Owner",
+                        "value": "Arjan Subedi"
+                      },
+                      {
+                        "key": "Project",
+                        "value": "Portfolio"
+                      },
+                      {
+                        "key": "Service",
+                        "value": "Portfolio"
+                      }
+                    ],
+                    "validationMethod": "DNS"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_certificatemanager.CfnCertificate",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_certificatemanager.Certificate",
+              "version": "2.100.0"
+            }
+          },
+          "PortfolioDistribution": {
+            "id": "PortfolioDistribution",
+            "path": "PortfolioInfrastructureStack/PortfolioDistribution",
+            "children": {
+              "Origin1": {
+                "id": "Origin1",
+                "path": "PortfolioInfrastructureStack/PortfolioDistribution/Origin1",
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.4.2"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/PortfolioDistribution/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                  "aws:cdk:cloudformation:props": {
+                    "distributionConfig": {
+                      "enabled": true,
+                      "origins": [
+                        {
+                          "domainName": "arjan-subedi-portfolio.s3-website-us-east-1.amazonaws.com",
+                          "id": "PortfolioInfrastructureStackPortfolioDistributionOrigin1472E48FF",
+                          "customOriginConfig": {
+                            "originSslProtocols": [
+                              "TLSv1.2"
+                            ],
+                            "originProtocolPolicy": "http-only"
+                          }
+                        }
+                      ],
+                      "defaultCacheBehavior": {
+                        "pathPattern": "*",
+                        "targetOriginId": "PortfolioInfrastructureStackPortfolioDistributionOrigin1472E48FF",
+                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                        "compress": true,
+                        "originRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+                        "viewerProtocolPolicy": "redirect-to-https"
+                      },
+                      "aliases": [
+                        "arjansubedi.com"
+                      ],
+                      "customErrorResponses": [
+                        {
+                          "errorCode": 404,
+                          "responseCode": 200,
+                          "responsePagePath": "/index.html"
+                        },
+                        {
+                          "errorCode": 403,
+                          "responseCode": 200,
+                          "responsePagePath": "/index.html"
+                        }
+                      ],
+                      "defaultRootObject": "index.html",
+                      "httpVersion": "http2",
+                      "ipv6Enabled": true,
+                      "priceClass": "PriceClass_100",
+                      "viewerCertificate": {
+                        "acmCertificateArn": {
+                          "Ref": "Certificate4E7ABB08"
+                        },
+                        "minimumProtocolVersion": "TLSv1.2_2021",
+                        "sslSupportMethod": "sni-only"
+                      }
+                    },
+                    "tags": [
+                      {
+                        "key": "Component",
+                        "value": "Infrastructure"
+                      },
+                      {
+                        "key": "Environment",
+                        "value": "Production"
+                      },
+                      {
+                        "key": "Owner",
+                        "value": "Arjan Subedi"
+                      },
+                      {
+                        "key": "Project",
+                        "value": "Portfolio"
+                      },
+                      {
+                        "key": "Service",
+                        "value": "Portfolio"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
+              "version": "2.100.0"
+            }
+          },
+          "PortfolioARecord": {
+            "id": "PortfolioARecord",
+            "path": "PortfolioInfrastructureStack/PortfolioARecord",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/PortfolioARecord/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                  "aws:cdk:cloudformation:props": {
+                    "aliasTarget": {
+                      "hostedZoneId": {
+                        "Fn::FindInMap": [
+                          "AWSCloudFrontPartitionHostedZoneIdMap",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          "zoneId"
+                        ]
+                      },
+                      "dnsName": {
+                        "Fn::GetAtt": [
+                          "PortfolioDistribution95A7252B",
+                          "DomainName"
+                        ]
+                      }
+                    },
+                    "hostedZoneId": "Z0081469162UYK3GDDQZ2",
+                    "name": "arjansubedi.com.",
+                    "type": "A"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_route53.ARecord",
+              "version": "2.100.0"
+            }
+          },
+          "AWSCloudFrontPartitionHostedZoneIdMap": {
+            "id": "AWSCloudFrontPartitionHostedZoneIdMap",
+            "path": "PortfolioInfrastructureStack/AWSCloudFrontPartitionHostedZoneIdMap",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnMapping",
+              "version": "2.100.0"
+            }
+          },
+          "PortfolioAaaaRecord": {
+            "id": "PortfolioAaaaRecord",
+            "path": "PortfolioInfrastructureStack/PortfolioAaaaRecord",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/PortfolioAaaaRecord/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                  "aws:cdk:cloudformation:props": {
+                    "aliasTarget": {
+                      "hostedZoneId": {
+                        "Fn::FindInMap": [
+                          "AWSCloudFrontPartitionHostedZoneIdMap",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          "zoneId"
+                        ]
+                      },
+                      "dnsName": {
+                        "Fn::GetAtt": [
+                          "PortfolioDistribution95A7252B",
+                          "DomainName"
+                        ]
+                      }
+                    },
+                    "hostedZoneId": "Z0081469162UYK3GDDQZ2",
+                    "name": "arjansubedi.com.",
+                    "type": "AAAA"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_route53.AaaaRecord",
+              "version": "2.100.0"
+            }
+          },
+          "CloudFrontInvalidationPolicy": {
+            "id": "CloudFrontInvalidationPolicy",
+            "path": "PortfolioInfrastructureStack/CloudFrontInvalidationPolicy",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/CloudFrontInvalidationPolicy/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                  "aws:cdk:cloudformation:props": {
+                    "policyDocument": {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "cloudfront:CreateInvalidation",
+                            "cloudfront:GetInvalidation",
+                            "cloudfront:ListInvalidations"
+                          ],
+                          "Effect": "Allow",
+                          "Resource": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:aws:cloudfront::985539769349:distribution/",
+                                {
+                                  "Ref": "PortfolioDistribution95A7252B"
+                                }
+                              ]
+                            ]
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "policyName": "PortfolioCloudFrontInvalidationPolicy",
+                    "roles": [
+                      {
+                        "Ref": "GitHubActionsDeploymentRoleF2069547"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Policy",
+              "version": "2.100.0"
+            }
+          },
+          "BucketName": {
+            "id": "BucketName",
+            "path": "PortfolioInfrastructureStack/BucketName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "BucketWebsiteUrl": {
+            "id": "BucketWebsiteUrl",
+            "path": "PortfolioInfrastructureStack/BucketWebsiteUrl",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "DeploymentRoleArn": {
+            "id": "DeploymentRoleArn",
+            "path": "PortfolioInfrastructureStack/DeploymentRoleArn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "DistributionId": {
+            "id": "DistributionId",
+            "path": "PortfolioInfrastructureStack/DistributionId",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "DistributionDomainName": {
+            "id": "DistributionDomainName",
+            "path": "PortfolioInfrastructureStack/DistributionDomainName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "WebsiteUrl": {
+            "id": "WebsiteUrl",
+            "path": "PortfolioInfrastructureStack/WebsiteUrl",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "PortfolioInfrastructureStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "PortfolioInfrastructureStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "PortfolioInfrastructureStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.100.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "PortfolioInfrastructureStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.100.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.100.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.100.0"
+    }
+  }
+}
