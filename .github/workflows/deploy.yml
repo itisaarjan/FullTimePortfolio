@@ -2,52 +2,38 @@ name: Deploy to S3
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
-env:
-  AWS_REGION: us-east-1
-  S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-
-permissions:
-    
-  id-token: write
-  contents: read
-
-jobs:
+jobs: 
   deploy:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+    permissions:
+      id-token: write
+      contents: read
 
-    - name: Install dependencies
-      run: npm ci
+    steps: 
+      - name: Checkout Source
+        uses: actions/checkout@v2
 
-    - name: Build project
-      run: npm run build
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-        aws-region: ${{ env.AWS_REGION }}
+      - name: Install dependencies
+        run: npm install
 
-    - name: Deploy to S3
-      run: |
-        aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
+      - name: Build project
+        run: npm run build
 
-    - name: Deploy status
-      run: |
-        echo "✅ Deployment completed successfully!"
-        echo "🌐 Your portfolio is now live at: http://${{ env.S3_BUCKET }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
-        echo "📦 S3 Bucket: ${{ env.S3_BUCKET }}"
-        echo "🌍 Region: ${{ env.AWS_REGION }}"
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          aws-region: us-east-1 
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync dist/ ${{secrets.S3_BUCKET_NAME}} --delete
