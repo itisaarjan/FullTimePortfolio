@@ -44,16 +44,9 @@ jobs:
       run: |
         aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
 
-    - name: Invalidate CloudFront cache (optional)
-      if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-      run: |
-        aws cloudfront create-invalidation \
-          --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-          --paths "/*"
-
     - name: Deploy status
       run: |
         echo "✅ Deployment completed successfully!"
-        echo "🌐 Your portfolio is now live at: https://${{ env.S3_BUCKET }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
+        echo "🌐 Your portfolio is now live at: http://${{ env.S3_BUCKET }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
         echo "📦 S3 Bucket: ${{ env.S3_BUCKET }}"
         echo "🌍 Region: ${{ env.AWS_REGION }}"
