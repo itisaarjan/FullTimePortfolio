@@ -209,7 +209,13 @@ src/
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
+### AWS S3 with GitHub Actions (Current Setup) 🚀
+1. Infrastructure deployed via AWS CDK
+2. Automatic deployment on push to main branch
+3. OIDC authentication for secure AWS access
+4. Visit: http://arjan-subedi-portfolio.s3-website-us-east-1.amazonaws.com
+
+### Vercel (Alternative)
 1. Push your code to GitHub
 2. Connect your repository to Vercel
 3. Deploy automatically on push
