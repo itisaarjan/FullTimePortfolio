@@ -38,7 +38,14 @@ jobs:
         run: aws s3 sync dist/ s3://${{secrets.S3_BUCKET_NAME}}
 
       - name: Invalidate CloudFront cache
+        env:
+          DISTRIBUTION_ID: ${{secrets.CLOUDFRONT_DISTRIBUTION_ID}}
         run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{secrets.CLOUDFRONT_DISTRIBUTION_ID}} \
-            --paths "/*"
+          if [ -n "$DISTRIBUTION_ID" ]; then
+            aws cloudfront create-invalidation \
+              --distribution-id $DISTRIBUTION_ID \
+              --paths "/*"
+          else
+            echo "CLOUDFRONT_DISTRIBUTION_ID not set, skipping cache invalidation"
+          fi
+
