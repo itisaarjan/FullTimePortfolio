@@ -41,8 +41,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Deploy to S3
-      run: |
-        aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
+      run: aws s3 sync dist/ s3://${{ env.S3_BUCKET }} --delete
 
     - name: Deploy status
       run: |
