@@ -53,7 +53,8 @@ export const portfolio: Portfolio = {
     "Python", "C/C++", "Java", "TypeScript", "SQL", "HTML/CSS",
     "React", "Node.js", "Express.js", "Tailwind CSS", "JWT",
     "AWS", "DynamoDB", "Docker", "Git",
-    "PostgreSQL", "MongoDB", "REST APIs", "Microservices", "GitHub Actions"
+    "PostgreSQL", "MongoDB", "REST APIs", "Microservices", "GitHub Actions",
+    "JUnit", "Mockito", "Guice"
   ],
   experience: [
     {
