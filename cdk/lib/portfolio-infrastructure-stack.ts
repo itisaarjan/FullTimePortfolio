@@ -61,28 +61,28 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
       maxSessionDuration: cdk.Duration.hours(1),
     });
 
-    // Create IAM policy for S3 deployment
-    const s3DeploymentPolicy = new iam.Policy(this, 'S3DeploymentPolicy', {
-      policyName: 'PortfolioS3DeploymentPolicy',
-      statements: [
-        new iam.PolicyStatement({
-          effect: iam.Effect.ALLOW,
-          actions: [
-            's3:GetObject',
-            's3:PutObject',
-            's3:DeleteObject',
-            's3:ListBucket',
-          ],
-          resources: [
-            this.bucket.bucketArn,
-            this.bucket.arnForObjects('*'),
-          ],
-        }),
-      ],
-    });
+                    // Create IAM policy for S3 deployment
+                const s3DeploymentPolicy = new iam.Policy(this, 'S3DeploymentPolicy', {
+                  policyName: 'PortfolioS3DeploymentPolicy',
+                  statements: [
+                    new iam.PolicyStatement({
+                      effect: iam.Effect.ALLOW,
+                      actions: [
+                        's3:GetObject',
+                        's3:PutObject',
+                        's3:DeleteObject',
+                        's3:ListBucket',
+                      ],
+                      resources: [
+                        this.bucket.bucketArn,
+                        this.bucket.arnForObjects('*'),
+                      ],
+                    }),
+                  ],
+                });
 
-    // Attach S3 deployment policy to role
-    this.deploymentRole.attachInlinePolicy(s3DeploymentPolicy);
+                // Attach S3 deployment policy to role
+                this.deploymentRole.attachInlinePolicy(s3DeploymentPolicy);
 
     // CloudFront distribution (optional)
     if (enableCloudFront) {
@@ -168,7 +168,7 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
               'cloudfront:GetInvalidation',
               'cloudfront:ListInvalidations',
             ],
-            resources: [`arn:aws:cloudfront::${this.account}:distribution/${this.distribution.distributionId}`],
+            resources: [`arn:aws:cloudfront::${this.account}:distribution/*`],
           }),
         ],
       });

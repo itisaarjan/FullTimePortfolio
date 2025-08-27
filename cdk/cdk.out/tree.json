@@ -430,17 +430,7 @@
                             "cloudfront:ListInvalidations"
                           ],
                           "Effect": "Allow",
-                          "Resource": {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:aws:cloudfront::985539769349:distribution/",
-                                {
-                                  "Ref": "PortfolioDistribution95A7252B"
-                                }
-                              ]
-                            ]
-                          }
+                          "Resource": "arn:aws:cloudfront::985539769349:distribution/*"
                         }
                       ],
                       "Version": "2012-10-17"
