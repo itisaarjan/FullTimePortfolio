@@ -209,47 +209,44 @@ src/
 
 ## 📧 Contact Form Setup
 
-The portfolio includes a modern contact form that sends emails to `arjansubedi2021@gmail.com`. 
+The portfolio includes a modern contact form that sends emails to `arjansubedi2021@gmail.com` using AWS Lambda and API Gateway.
 
 ### 🛠️ Setup Instructions:
 
-1. **Copy environment variables:**
+1. **Deploy the Lambda function:**
+   ```bash
+   cd lambda
+   npm install
+   npm run build
+   ```
+
+2. **Deploy the CDK infrastructure:**
+   ```bash
+   cd cdk
+   npm run build
+   cdk deploy
+   ```
+
+3. **Configure Lambda environment variables** in the AWS Lambda console:
+   - `SMTP_HOST`: smtp.gmail.com
+   - `SMTP_PORT`: 587
+   - `SMTP_USER`: your-email@gmail.com
+   - `SMTP_PASS`: your-app-password
+   - `CONTACT_TO_EMAIL`: arjansubedi2021@gmail.com
+   - `FROM_EMAIL`: Portfolio <no-reply@arjansubedi.com>
+
+4. **Update the frontend API URL** in your environment variables:
    ```bash
    cp env.example .env.local
+   # Update VITE_API_BASE_URL with your API Gateway URL
    ```
 
-2. **Configure email settings in `.env.local`:**
-   - For Gmail: Use App Password (not regular password)
-   - For Outlook/Hotmail: Use your regular password
-   - Update `CONTACT_TO_EMAIL` to your email address
+### 📧 Email Configuration:
 
-3. **Start the server:**
-   ```bash
-   npm run server
-   ```
-
-4. **Start the frontend:**
-   ```bash
-   npm run dev
-   ```
-
-### 📧 Email Configuration Examples:
-
-**Gmail:**
-```
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-```
-
-**Outlook/Hotmail:**
-```
-SMTP_HOST=smtp-mail.outlook.com
-SMTP_PORT=587
-SMTP_USER=your-email@outlook.com
-SMTP_PASS=your-password
-```
+**Gmail Setup:**
+1. Enable 2-factor authentication
+2. Generate an App Password
+3. Use the App Password in `SMTP_PASS`
 
 ### 🔒 Security Features:
 - ✅ Honeypot field to prevent spam
@@ -257,6 +254,7 @@ SMTP_PASS=your-password
 - ✅ Client-side and server-side validation
 - ✅ Minimum submit time (1.5 seconds)
 - ✅ CORS protection
+- ✅ Serverless architecture (no EC2 needed)
 
 ## 🚀 Deployment
 1. Infrastructure deployed via AWS CDK
