@@ -184,7 +184,7 @@ export class PortfolioInfrastructureStack extends cdk.Stack {
       const contactFunction = new lambda.Function(this, 'ContactFunction', {
         runtime: lambda.Runtime.NODEJS_18_X,
         handler: 'contact.handler',
-        code: lambda.Code.fromAsset('lambda'),
+        code: lambda.Code.fromAsset('../lambda'),
         timeout: cdk.Duration.seconds(30),
         memorySize: 256,
         environment: {

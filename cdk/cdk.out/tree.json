@@ -67,10 +67,6 @@
                     "roleName": "GitHubActionsPortfolioDeploy",
                     "tags": [
                       {
-                        "key": "Component",
-                        "value": "Infrastructure"
-                      },
-                      {
                         "key": "Environment",
                         "value": "Production"
                       },
@@ -80,10 +76,6 @@
                       },
                       {
                         "key": "Project",
-                        "value": "Portfolio"
-                      },
-                      {
-                        "key": "Service",
                         "value": "Portfolio"
                       }
                     ]
@@ -177,10 +169,6 @@
                     ],
                     "tags": [
                       {
-                        "key": "Component",
-                        "value": "Infrastructure"
-                      },
-                      {
                         "key": "Environment",
                         "value": "Production"
                       },
@@ -194,10 +182,6 @@
                       },
                       {
                         "key": "Project",
-                        "value": "Portfolio"
-                      },
-                      {
-                        "key": "Service",
                         "value": "Portfolio"
                       }
                     ],
@@ -284,10 +268,6 @@
                     },
                     "tags": [
                       {
-                        "key": "Component",
-                        "value": "Infrastructure"
-                      },
-                      {
                         "key": "Environment",
                         "value": "Production"
                       },
@@ -297,10 +277,6 @@
                       },
                       {
                         "key": "Project",
-                        "value": "Portfolio"
-                      },
-                      {
-                        "key": "Service",
                         "value": "Portfolio"
                       }
                     ]
@@ -454,6 +430,809 @@
               "version": "2.100.0"
             }
           },
+          "ContactFunction": {
+            "id": "ContactFunction",
+            "path": "PortfolioInfrastructureStack/ContactFunction",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "PortfolioInfrastructureStack/ContactFunction/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "PortfolioInfrastructureStack/ContactFunction/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.100.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "PortfolioInfrastructureStack/ContactFunction/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ],
+                        "tags": [
+                          {
+                            "key": "Environment",
+                            "value": "Production"
+                          },
+                          {
+                            "key": "Owner",
+                            "value": "Arjan Subedi"
+                          },
+                          {
+                            "key": "Project",
+                            "value": "Portfolio"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.100.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "PortfolioInfrastructureStack/ContactFunction/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "PortfolioInfrastructureStack/ContactFunction/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.100.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "PortfolioInfrastructureStack/ContactFunction/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.100.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/ContactFunction/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-985539769349-us-east-1",
+                      "s3Key": "9573e72f9157653a5d4ae3fbcd3e24eb3c8a508d8286583ab0c18085196f62b8.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "SMTP_HOST": "smtp.gmail.com",
+                        "SMTP_PORT": "587",
+                        "SMTP_USER": "",
+                        "SMTP_PASS": "",
+                        "CONTACT_TO_EMAIL": "arjansubedi2021@gmail.com",
+                        "FROM_EMAIL": "Portfolio <no-reply@arjansubedi.com>",
+                        "ALLOWED_ORIGIN": "https://arjansubedi.com"
+                      }
+                    },
+                    "handler": "contact.handler",
+                    "memorySize": 256,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "ContactFunctionServiceRoleACF19414",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "nodejs18.x",
+                    "tags": [
+                      {
+                        "key": "Environment",
+                        "value": "Production"
+                      },
+                      {
+                        "key": "Owner",
+                        "value": "Arjan Subedi"
+                      },
+                      {
+                        "key": "Project",
+                        "value": "Portfolio"
+                      }
+                    ],
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.100.0"
+                }
+              },
+              "LogRetention": {
+                "id": "LogRetention",
+                "path": "PortfolioInfrastructureStack/ContactFunction/LogRetention",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "PortfolioInfrastructureStack/ContactFunction/LogRetention/Resource",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.LogRetention",
+                  "version": "2.100.0"
+                }
+              },
+              "LogGroup": {
+                "id": "LogGroup",
+                "path": "PortfolioInfrastructureStack/ContactFunction/LogGroup",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.100.0"
+            }
+          },
+          "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a": {
+            "id": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+            "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.100.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.100.0"
+                }
+              },
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.100.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ],
+                        "tags": [
+                          {
+                            "key": "Environment",
+                            "value": "Production"
+                          },
+                          {
+                            "key": "Owner",
+                            "value": "Arjan Subedi"
+                          },
+                          {
+                            "key": "Project",
+                            "value": "Portfolio"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.100.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:DeleteRetentionPolicy",
+                                    "logs:PutRetentionPolicy"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+                            "roles": [
+                              {
+                                "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.100.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.100.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "ContactApi": {
+            "id": "ContactApi",
+            "path": "PortfolioInfrastructureStack/ContactApi",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/ContactApi/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "description": "API for portfolio contact form",
+                    "name": "Portfolio Contact API",
+                    "tags": [
+                      {
+                        "key": "Environment",
+                        "value": "Production"
+                      },
+                      {
+                        "key": "Owner",
+                        "value": "Arjan Subedi"
+                      },
+                      {
+                        "key": "Project",
+                        "value": "Portfolio"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "version": "2.100.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "PortfolioInfrastructureStack/ContactApi/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "PortfolioInfrastructureStack/ContactApi/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "description": "API for portfolio contact form",
+                        "restApiId": {
+                          "Ref": "ContactApi2DD5FE99"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                  "version": "2.100.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "PortfolioInfrastructureStack/ContactApi/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "PortfolioInfrastructureStack/ContactApi/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "deploymentId": {
+                          "Ref": "ContactApiDeployment8DA45B1Fc53ca9553a65d316e415fa0a3be63da4"
+                        },
+                        "restApiId": {
+                          "Ref": "ContactApi2DD5FE99"
+                        },
+                        "stageName": "prod",
+                        "tags": [
+                          {
+                            "key": "Environment",
+                            "value": "Production"
+                          },
+                          {
+                            "key": "Owner",
+                            "value": "Arjan Subedi"
+                          },
+                          {
+                            "key": "Project",
+                            "value": "Portfolio"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                  "version": "2.100.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "PortfolioInfrastructureStack/ContactApi/Endpoint",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.100.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "PortfolioInfrastructureStack/ContactApi/Default",
+                "children": {
+                  "OPTIONS": {
+                    "id": "OPTIONS",
+                    "path": "PortfolioInfrastructureStack/ContactApi/Default/OPTIONS",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "PortfolioInfrastructureStack/ContactApi/Default/OPTIONS/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                          "aws:cdk:cloudformation:props": {
+                            "apiKeyRequired": false,
+                            "authorizationType": "NONE",
+                            "httpMethod": "OPTIONS",
+                            "integration": {
+                              "type": "MOCK",
+                              "requestTemplates": {
+                                "application/json": "{ statusCode: 200 }"
+                              },
+                              "integrationResponses": [
+                                {
+                                  "statusCode": "204",
+                                  "responseParameters": {
+                                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type'",
+                                    "method.response.header.Access-Control-Allow-Origin": "'https://arjansubedi.com'",
+                                    "method.response.header.Vary": "'Origin'",
+                                    "method.response.header.Access-Control-Allow-Methods": "'POST,OPTIONS'",
+                                    "method.response.header.Access-Control-Allow-Credentials": "'true'"
+                                  }
+                                }
+                              ]
+                            },
+                            "methodResponses": [
+                              {
+                                "statusCode": "204",
+                                "responseParameters": {
+                                  "method.response.header.Access-Control-Allow-Headers": true,
+                                  "method.response.header.Access-Control-Allow-Origin": true,
+                                  "method.response.header.Vary": true,
+                                  "method.response.header.Access-Control-Allow-Methods": true,
+                                  "method.response.header.Access-Control-Allow-Credentials": true
+                                }
+                              }
+                            ],
+                            "resourceId": {
+                              "Fn::GetAtt": [
+                                "ContactApi2DD5FE99",
+                                "RootResourceId"
+                              ]
+                            },
+                            "restApiId": {
+                              "Ref": "ContactApi2DD5FE99"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                          "version": "2.100.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                      "version": "2.100.0"
+                    }
+                  },
+                  "contact": {
+                    "id": "contact",
+                    "path": "PortfolioInfrastructureStack/ContactApi/Default/contact",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "ContactApi2DD5FE99",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "contact",
+                            "restApiId": {
+                              "Ref": "ContactApi2DD5FE99"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.100.0"
+                        }
+                      },
+                      "OPTIONS": {
+                        "id": "OPTIONS",
+                        "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/OPTIONS",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/OPTIONS/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "apiKeyRequired": false,
+                                "authorizationType": "NONE",
+                                "httpMethod": "OPTIONS",
+                                "integration": {
+                                  "type": "MOCK",
+                                  "requestTemplates": {
+                                    "application/json": "{ statusCode: 200 }"
+                                  },
+                                  "integrationResponses": [
+                                    {
+                                      "statusCode": "204",
+                                      "responseParameters": {
+                                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type'",
+                                        "method.response.header.Access-Control-Allow-Origin": "'https://arjansubedi.com'",
+                                        "method.response.header.Vary": "'Origin'",
+                                        "method.response.header.Access-Control-Allow-Methods": "'POST,OPTIONS'",
+                                        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "methodResponses": [
+                                  {
+                                    "statusCode": "204",
+                                    "responseParameters": {
+                                      "method.response.header.Access-Control-Allow-Headers": true,
+                                      "method.response.header.Access-Control-Allow-Origin": true,
+                                      "method.response.header.Vary": true,
+                                      "method.response.header.Access-Control-Allow-Methods": true,
+                                      "method.response.header.Access-Control-Allow-Credentials": true
+                                    }
+                                  }
+                                ],
+                                "resourceId": {
+                                  "Ref": "ContactApicontactC8C71431"
+                                },
+                                "restApiId": {
+                                  "Ref": "ContactApi2DD5FE99"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.100.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.100.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/POST",
+                        "children": {
+                          "ApiPermission.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact": {
+                            "id": "ApiPermission.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact",
+                            "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/POST/ApiPermission.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "ContactFunction0F68BFE2",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:execute-api:us-east-1:985539769349:",
+                                      {
+                                        "Ref": "ContactApi2DD5FE99"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "ContactApiDeploymentStageprodE4E2C75E"
+                                      },
+                                      "/POST/contact"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.100.0"
+                            }
+                          },
+                          "ApiPermission.Test.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact": {
+                            "id": "ApiPermission.Test.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact",
+                            "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/POST/ApiPermission.Test.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "ContactFunction0F68BFE2",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:execute-api:us-east-1:985539769349:",
+                                      {
+                                        "Ref": "ContactApi2DD5FE99"
+                                      },
+                                      "/test-invoke-stage/POST/contact"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.100.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "PortfolioInfrastructureStack/ContactApi/Default/contact/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "authorizationType": "NONE",
+                                "httpMethod": "POST",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "ContactFunction0F68BFE2",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                },
+                                "resourceId": {
+                                  "Ref": "ContactApicontactC8C71431"
+                                },
+                                "restApiId": {
+                                  "Ref": "ContactApi2DD5FE99"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.100.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.100.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.100.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.RestApi",
+              "version": "2.100.0"
+            }
+          },
+          "ApiGatewayPolicy": {
+            "id": "ApiGatewayPolicy",
+            "path": "PortfolioInfrastructureStack/ApiGatewayPolicy",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "PortfolioInfrastructureStack/ApiGatewayPolicy/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                  "aws:cdk:cloudformation:props": {
+                    "policyDocument": {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "apigateway:GET",
+                            "apigateway:POST"
+                          ],
+                          "Effect": "Allow",
+                          "Resource": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:aws:execute-api:us-east-1:985539769349:",
+                                {
+                                  "Ref": "ContactApi2DD5FE99"
+                                },
+                                "/*/*/*"
+                              ]
+                            ]
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "policyName": "PortfolioApiGatewayPolicy",
+                    "roles": [
+                      {
+                        "Ref": "GitHubActionsDeploymentRoleF2069547"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                  "version": "2.100.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Policy",
+              "version": "2.100.0"
+            }
+          },
           "BucketName": {
             "id": "BucketName",
             "path": "PortfolioInfrastructureStack/BucketName",
@@ -497,6 +1276,14 @@
           "WebsiteUrl": {
             "id": "WebsiteUrl",
             "path": "PortfolioInfrastructureStack/WebsiteUrl",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.100.0"
+            }
+          },
+          "ContactApiUrl": {
+            "id": "ContactApiUrl",
+            "path": "PortfolioInfrastructureStack/ContactApiUrl",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.100.0"

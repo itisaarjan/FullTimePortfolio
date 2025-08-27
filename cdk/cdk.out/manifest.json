@@ -16,16 +16,14 @@
         "templateFile": "PortfolioInfrastructureStack.template.json",
         "terminationProtection": false,
         "tags": {
-          "Component": "Infrastructure",
           "Environment": "Production",
           "Owner": "Arjan Subedi",
-          "Project": "Portfolio",
-          "Service": "Portfolio"
+          "Project": "Portfolio"
         },
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::985539769349:role/cdk-hnb659fds-deploy-role-985539769349-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::985539769349:role/cdk-hnb659fds-cfn-exec-role-985539769349-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-985539769349-us-east-1/92d269c60d08014fb6f5be7f98edff7a6cb76ad9063d278589075b7242b488de.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-985539769349-us-east-1/43cedb6904315ebd344840bc36c930582a8c090cb448a448724f1909a10ef27e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -46,10 +44,6 @@
             "type": "aws:cdk:stack-tags",
             "data": [
               {
-                "Key": "Component",
-                "Value": "Infrastructure"
-              },
-              {
                 "Key": "Environment",
                 "Value": "Production"
               },
@@ -59,10 +53,6 @@
               },
               {
                 "Key": "Project",
-                "Value": "Portfolio"
-              },
-              {
-                "Key": "Service",
                 "Value": "Portfolio"
               }
             ]
@@ -116,6 +106,108 @@
             "data": "CloudFrontInvalidationPolicyA47BE5B9"
           }
         ],
+        "/PortfolioInfrastructureStack/ContactFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactFunctionServiceRoleACF19414"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactFunction0F68BFE2"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactFunction/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactFunctionLogRetention213695CC"
+          }
+        ],
+        "/PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/PortfolioInfrastructureStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApi2DD5FE99"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApiDeployment8DA45B1Fc53ca9553a65d316e415fa0a3be63da4"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApiDeploymentStageprodE4E2C75E"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApiEndpoint0B53FAC4"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApiOPTIONS412E152A"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Default/contact/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApicontactC8C71431"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Default/contact/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApicontactOPTIONSC53D9E3A"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Default/contact/POST/ApiPermission.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApicontactPOSTApiPermissionPortfolioInfrastructureStackContactApi19CE7CAFPOSTcontact4A4F34C9"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Default/contact/POST/ApiPermission.Test.PortfolioInfrastructureStackContactApi19CE7CAF.POST..contact": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApicontactPOSTApiPermissionTestPortfolioInfrastructureStackContactApi19CE7CAFPOSTcontactC66A9E53"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApi/Default/contact/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApicontactPOSTD507DE90"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ApiGatewayPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayPolicyA65EA393"
+          }
+        ],
         "/PortfolioInfrastructureStack/BucketName": [
           {
             "type": "aws:cdk:logicalId",
@@ -150,6 +242,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "WebsiteUrl"
+          }
+        ],
+        "/PortfolioInfrastructureStack/ContactApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ContactApiUrl"
           }
         ],
         "/PortfolioInfrastructureStack/CDKMetadata/Default": [

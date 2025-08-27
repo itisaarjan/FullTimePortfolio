@@ -56,7 +56,7 @@ export default function ContactSection() {
     setToast(null);
 
     try {
-      const response = await fetch(`${(import.meta as any).env.VITE_API_BASE_URL || 'https://your-api-gateway-url.amazonaws.com/prod'}/contact`, {
+      const response = await fetch(`${(import.meta as any).env.VITE_API_BASE_URL || 'https://82uegstn4h.execute-api.us-east-1.amazonaws.com/prod'}/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
