@@ -86,7 +86,7 @@ export function Experience() {
                       {/* USF logo avatar */}
                       <div className="h-10 w-10 grid place-items-center shrink-0">
                         <img
-                          src="/src/images/usflogo.png"
+                          src="/logos/usflogo.png"
                           alt="University of South Florida logo"
                           className="h-8 w-8"
                         />
@@ -125,7 +125,7 @@ export function Experience() {
                       {/* Simrik Med logo avatar */}
                       <div className="h-12 w-12 grid place-items-center shrink-0">
                         <img
-                          src="/src/images/simrikmedlogo.png"
+                          src="/logos/simrikmedlogo.png"
                           alt="Simrik Med LLC logo"
                           className="h-10 w-10"
                         />
