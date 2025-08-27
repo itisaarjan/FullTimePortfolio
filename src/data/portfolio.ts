@@ -73,7 +73,7 @@ export const portfolio: Portfolio = {
       title: "SDE Intern – AWS Lambda",
       period: "Summer 2025",
       bullets: [
-        "Engineered an internal Health Guardian service to automate detection and isolation of gray hosts, enabling resilient Availability Zone (AZ) failover",
+        "Engineered an internal monitoring service to automate detection and isolation of gray hosts, enabling resilient Availability Zone (AZ) failover",
         "Implemented dual traffic shift mechanisms driven by host-level health metrics using ArcZonalShift and S3-based signaling",
         "Developed a lightweight, single-threaded backend service in Java using Guice for dependency injection",
         "Utilized DynamoDB and CloudFormation for scalable, fault-tolerant deployments with comprehensive testing"
