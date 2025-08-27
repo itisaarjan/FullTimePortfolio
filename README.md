@@ -2,6 +2,62 @@
 
 A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS. Features smooth animations, dark mode support, and a clean, professional design.
 
+## 🏗️ Cloud Architecture
+
+```mermaid
+graph TB
+    subgraph "Frontend"
+        A[React App] --> B[Vite Build]
+        B --> C[GitHub Actions]
+    end
+
+    subgraph "AWS Infrastructure"
+        C --> D[S3 Bucket]
+        D --> E[CloudFront CDN]
+        E --> F[Route 53]
+        F --> G[Custom Domain<br/>arjansubedi.com]
+        
+        subgraph "Contact Form"
+            H[Contact Form] --> I[API Gateway]
+            I --> J[Lambda Function]
+            J --> K[Nodemailer]
+            K --> L[Email Service<br/>arjansubedi2021@gmail.com]
+        end
+        
+        subgraph "Security"
+            M[SSL Certificate<br/>ACM]
+            N[IAM Roles<br/>OIDC]
+            O[Rate Limiting]
+        end
+    end
+
+    subgraph "CI/CD Pipeline"
+        P[Git Push] --> Q[GitHub Actions]
+        Q --> R[Build & Deploy]
+        R --> S[Cache Invalidation]
+    end
+
+    style A fill:#61dafb
+    style D fill:#ff9900
+    style E fill:#ff9900
+    style I fill:#ff9900
+    style J fill:#ff9900
+    style G fill:#00ff00
+    style M fill:#ff9900
+    style N fill:#ff9900
+```
+
+### 🏛️ Architecture Components:
+
+- **🌐 Frontend**: React + TypeScript + Tailwind CSS
+- **☁️ Hosting**: AWS S3 Static Website Hosting
+- **🚀 CDN**: CloudFront for global performance
+- **🔗 DNS**: Route 53 with custom domain
+- **🔐 SSL**: ACM certificate for HTTPS
+- **📧 Contact**: Lambda + API Gateway + Nodemailer
+- **🔄 CI/CD**: GitHub Actions with OIDC authentication
+- **🛡️ Security**: IAM roles, rate limiting, CORS protection
+
 ## 🚀 Features
 
 - **Responsive Design**: Works perfectly on all devices (320px → 1440+)
