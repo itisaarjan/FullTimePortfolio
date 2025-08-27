@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { ThemeToggle } from './ThemeToggle';
+import { X, Menu } from 'lucide-react';
 
 const navItems = [
   { href: '#skills', label: 'Skills' },
@@ -13,6 +15,15 @@ const navItems = [
 
 export function Nav() {
   const activeSection = useActiveSection();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <motion.nav
@@ -26,10 +37,12 @@ export function Nav() {
             href="#hero"
             className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
             whileHover={{ scale: 1.05 }}
+            onClick={closeMobileMenu}
           >
             AS
           </motion.a>
 
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <motion.a
@@ -60,26 +73,50 @@ export function Nav() {
             
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              onClick={toggleMobileMenu}
+              className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               aria-label="Toggle mobile menu"
             >
-              <svg
-                className="w-5 h-5 text-gray-900 dark:text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5 text-gray-900 dark:text-white" />
+              ) : (
+                <Menu className="w-5 h-5 text-gray-900 dark:text-white" />
+              )}
             </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden border-t border-gray-200 dark:border-gray-700"
+            >
+              <div className="py-4 space-y-2">
+                {navItems.map((item) => (
+                  <motion.a
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeMobileMenu}
+                    className={`block px-4 py-3 text-base font-medium transition-colors duration-200 rounded-lg ${
+                      activeSection === item.href.slice(1)
+                        ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                        : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }`}
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {item.label}
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.nav>
   );
