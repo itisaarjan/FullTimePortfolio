@@ -6,7 +6,7 @@ import { Experience } from './components/Experience';
 import { Projects } from './components/Projects';
 import { Education } from './components/Education';
 import { Honors } from './components/Honors';
-import { Contact } from './components/Contact';
+import ContactSection from './components/ContactSection';
 import { ScrollToTop } from './components/ScrollToTop';
 import { portfolio } from './data/portfolio';
 
@@ -45,9 +45,7 @@ function App() {
           <Honors />
         </Section>
 
-        <Section id="contact" title="Get In Touch">
-          <Contact />
-        </Section>
+        <ContactSection />
       </main>
 
       <footer className="py-8 border-t border-gray-200 dark:border-gray-700">

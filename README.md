@@ -207,9 +207,58 @@ src/
 - **Semantic HTML**: Proper heading hierarchy and landmarks
 - **Keyboard Navigation**: Full keyboard accessibility
 
-## 🚀 Deployment
+## 📧 Contact Form Setup
 
-### AWS S3 with CloudFront & Route 53 (Current Setup) 🚀
+The portfolio includes a modern contact form that sends emails to `arjansubedi2021@gmail.com`. 
+
+### 🛠️ Setup Instructions:
+
+1. **Copy environment variables:**
+   ```bash
+   cp env.example .env.local
+   ```
+
+2. **Configure email settings in `.env.local`:**
+   - For Gmail: Use App Password (not regular password)
+   - For Outlook/Hotmail: Use your regular password
+   - Update `CONTACT_TO_EMAIL` to your email address
+
+3. **Start the server:**
+   ```bash
+   npm run server
+   ```
+
+4. **Start the frontend:**
+   ```bash
+   npm run dev
+   ```
+
+### 📧 Email Configuration Examples:
+
+**Gmail:**
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+```
+
+**Outlook/Hotmail:**
+```
+SMTP_HOST=smtp-mail.outlook.com
+SMTP_PORT=587
+SMTP_USER=your-email@outlook.com
+SMTP_PASS=your-password
+```
+
+### 🔒 Security Features:
+- ✅ Honeypot field to prevent spam
+- ✅ Rate limiting (1 request per 10 seconds per IP)
+- ✅ Client-side and server-side validation
+- ✅ Minimum submit time (1.5 seconds)
+- ✅ CORS protection
+
+## 🚀 Deployment
 1. Infrastructure deployed via AWS CDK
 2. Automatic deployment on push to main branch
 3. OIDC authentication for secure AWS access
