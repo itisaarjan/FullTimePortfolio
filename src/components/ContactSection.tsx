@@ -39,14 +39,15 @@ export default function ContactSection() {
   }, []);
 
   const onSubmit = async (data: ContactFormData) => {
-    // Check honeypot
-    if (data.company) {
+    // Check honeypot (only if it has a meaningful value)
+    if (data.company && data.company.trim().length > 0) {
+      console.log('Honeypot detected:', data.company);
       setToast({ type: 'error', message: 'Invalid submission detected.' });
       return;
     }
 
-    // Check minimum submit time (1.5 seconds)
-    if (submitTime && Date.now() - submitTime < 1500) {
+    // Check minimum submit time (0.5 seconds)
+    if (submitTime && Date.now() - submitTime < 500) {
       setToast({ type: 'error', message: 'Please wait a moment before submitting.' });
       return;
     }
@@ -193,12 +194,14 @@ export default function ContactSection() {
             </div>
 
             {/* Honeypot field */}
-            <div className="absolute -left-[9999px]">
+            <div className="absolute -left-[9999px] opacity-0 pointer-events-none">
               <input
                 {...register('company')}
                 type="text"
+                name="website"
                 tabIndex={-1}
                 autoComplete="off"
+                aria-hidden="true"
               />
             </div>
 
