@@ -6,9 +6,10 @@ interface CardProps {
   children: ReactNode;
   className?: string;
   as?: 'div' | 'article';
+  onClick?: () => void;
 }
 
-export function Card({ children, className = '', as: Component = 'div' }: CardProps) {
+export function Card({ children, className = '', as: Component = 'div', onClick }: CardProps) {
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -20,6 +21,7 @@ export function Card({ children, className = '', as: Component = 'div' }: CardPr
           'focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2',
           className
         )}
+        onClick={onClick}
       >
         {children}
       </Component>
