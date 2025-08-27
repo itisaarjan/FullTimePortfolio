@@ -129,7 +129,7 @@ export const portfolio: Portfolio = {
       name: "WanderLust",
       slug: "wanderlust",
       tag: "Travel Platform",
-      link: "https://github.com/itisaarjan/wanderlust",
+      link: "https://wanderlust-fwwe.onrender.com/listings",
       desc: "A full-stack travel listing platform inspired by Airbnb, enabling users to list hotels, places, and experiences.",
       tech: ["React", "Node.js", "Express", "MongoDB", "Mapbox", "JWT", "Cloudinary"]
     }
