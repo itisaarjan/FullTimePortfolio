@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { motion } from 'framer-motion';
 import { Send, AlertCircle, CheckCircle } from 'lucide-react';
 import { Section } from './Section';
+import emailjs from '@emailjs/browser';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(80, 'Name must be less than 80 characters'),
@@ -14,11 +15,6 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-
-interface ContactResponse {
-  success: boolean;
-  error?: string;
-}
 
 export default function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,6 +32,8 @@ export default function ContactSection() {
 
   useEffect(() => {
     setSubmitTime(Date.now());
+    // Initialize EmailJS
+    emailjs.init(process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY');
   }, []);
 
   const onSubmit = async (data: ContactFormData) => {
@@ -56,28 +54,29 @@ export default function ContactSection() {
     setToast(null);
 
     try {
-      const response = await fetch(`${(import.meta as any).env.VITE_API_BASE_URL || 'https://82uegstn4h.execute-api.us-east-1.amazonaws.com/prod'}/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          message: data.message,
-        }),
-      });
+      const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        message: data.message,
+        to_email: 'arjansubedi2021@gmail.com',
+      };
 
-      const result: ContactResponse = await response.json();
+      const result = await emailjs.send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
+        templateParams,
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+      );
 
-      if (result.success) {
+      if (result.status === 200) {
         setToast({ type: 'success', message: "Thanks! I'll get back to you soon." });
         reset();
       } else {
-        setToast({ type: 'error', message: result.error || 'Failed to send message. Please try again.' });
+        setToast({ type: 'error', message: 'Failed to send message. Please try again.' });
       }
     } catch (error) {
-      setToast({ type: 'error', message: 'Network error. Please check your connection and try again.' });
+      console.error('EmailJS error:', error);
+      setToast({ type: 'error', message: 'Failed to send message. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
