@@ -252,7 +252,7 @@
                         "targetOriginId": "PortfolioInfrastructureStackPortfolioDistributionOrigin1472E48FF",
                         "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
                         "compress": true,
-                        "originRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+                        "originRequestPolicyId": "acba4595-bd28-49b8-b9fe-13317c0390fa",
                         "viewerProtocolPolicy": "redirect-to-https"
                       },
                       "aliases": [

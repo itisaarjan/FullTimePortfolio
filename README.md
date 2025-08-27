@@ -209,12 +209,14 @@ src/
 
 ## 🚀 Deployment
 
-### AWS S3 with GitHub Actions (Current Setup) 🚀
+### AWS S3 with CloudFront & Route 53 (Current Setup) 🚀
 1. Infrastructure deployed via AWS CDK
 2. Automatic deployment on push to main branch
 3. OIDC authentication for secure AWS access
-4. Visit: http://arjan-subedi-portfolio.s3-website-us-east-1.amazonaws.com
-5. ✅ Successfully deployed and live!
+4. CloudFront CDN for global performance
+5. Custom domain with SSL certificate
+6. Visit: **https://arjansubedi.com**
+7. ✅ Successfully deployed and live!
 
 ### Vercel (Alternative)
 1. Push your code to GitHub

@@ -153,7 +153,7 @@
      "DefaultCacheBehavior": {
       "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
       "Compress": true,
-      "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+      "OriginRequestPolicyId": "acba4595-bd28-49b8-b9fe-13317c0390fa",
       "TargetOriginId": "PortfolioInfrastructureStackPortfolioDistributionOrigin1472E48FF",
       "ViewerProtocolPolicy": "redirect-to-https"
      },
