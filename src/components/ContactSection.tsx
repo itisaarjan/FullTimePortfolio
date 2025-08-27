@@ -36,6 +36,16 @@ export default function ContactSection() {
     emailjs.init((import.meta as any).env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY');
   }, []);
 
+  // Auto-dismiss toast after 5 seconds
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => {
+        setToast(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
   const onSubmit = async (data: ContactFormData) => {
     // Check honeypot (only if it has a meaningful value)
     if (data.company && data.company.trim().length > 0) {
@@ -54,6 +64,24 @@ export default function ContactSection() {
     setToast(null);
 
     try {
+      const serviceId = (import.meta as any).env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = (import.meta as any).env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = (import.meta as any).env.VITE_EMAILJS_PUBLIC_KEY;
+
+      // Check if environment variables are set
+      if (!serviceId || !templateId || !publicKey || 
+          serviceId === 'YOUR_SERVICE_ID' || 
+          templateId === 'YOUR_TEMPLATE_ID' || 
+          publicKey === 'YOUR_PUBLIC_KEY') {
+        console.error('EmailJS environment variables not configured:', {
+          serviceId,
+          templateId,
+          publicKey: publicKey ? 'SET' : 'NOT_SET'
+        });
+        setToast({ type: 'error', message: 'Email service not configured. Please try again later.' });
+        return;
+      }
+
       const templateParams = {
         from_name: data.name,
         from_email: data.email,
@@ -61,12 +89,9 @@ export default function ContactSection() {
         to_email: 'arjansubedi2021@gmail.com',
       };
 
-      const result = await emailjs.send(
-        (import.meta as any).env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-        (import.meta as any).env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
-        templateParams,
-        (import.meta as any).env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
-      );
+      console.log('Sending email with params:', { serviceId, templateId, templateParams });
+
+      const result = await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
       if (result.status === 200) {
         setToast({ type: 'success', message: "Thanks! I'll get back to you soon." });
@@ -245,13 +270,25 @@ export default function ContactSection() {
             role="alert"
             aria-live="polite"
           >
-            <div className="flex items-center gap-2">
-              {toast.type === 'success' ? (
-                <CheckCircle size={20} />
-              ) : (
-                <AlertCircle size={20} />
-              )}
-              <span>{toast.message}</span>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                {toast.type === 'success' ? (
+                  <CheckCircle size={20} />
+                ) : (
+                  <AlertCircle size={20} />
+                )}
+                <span>{toast.message}</span>
+              </div>
+              <button
+                onClick={() => setToast(null)}
+                className="ml-2 text-white/80 hover:text-white transition-colors"
+                aria-label="Close notification"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
           </motion.div>
         )}
