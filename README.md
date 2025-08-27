@@ -126,5 +126,5 @@ This project is open source and available under the [MIT License](LICENSE).
 
 - **Website**: [arjansubedi.com](https://arjansubedi.com)
 - **Email**: arjansubedi2021@gmail.com
-- **LinkedIn**: [Your LinkedIn]
+- **LinkedIn**: https://www.linkedin.com/in/arjansubedi/
 - **GitHub**: [@itisaarjan](https://github.com/itisaarjan)
